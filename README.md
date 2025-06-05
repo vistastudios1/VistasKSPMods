@@ -15,7 +15,7 @@ This is the repository that I store my mods within
 - First, drag the contents of "GameData" into your KSP GameData folder.
 - Second, drag the ships folder into your KSP Directory. Press "Replace" if needed.
 
-Boom! Now you have the HSR Installed.
+Boom! Now you have the mod Installed.
 
 **If you don't want Nubro's script, you may delete the script folder out of [KSP DIRECTORY]/Ships/**
 
