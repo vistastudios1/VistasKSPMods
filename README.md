@@ -15,4 +15,4 @@ This is the repository that I store my mods within
 
 All parts within the "VistaSEPMods" folder and its contents are distributed under the GPL-v3.0 License. See more in the "License" file.
 
-The "Scripts" folder within any release file and its contents are distributed under the ownership of [Nubro24](https://github.com/Nubro24/KSP_Starship-kOS-Interface/tree/main) and are distributed under [their GPL-v3.0 License](https://github.com/Nubro24/KSP_Starship-kOS-Interface/blob/main/LICENSE).
+The "Scripts" folder within any release file and its contents are under the ownership of [Nubro24](https://github.com/Nubro24/KSP_Starship-kOS-Interface/tree/main) and are distributed under [their GPL-v3.0 License](https://github.com/Nubro24/KSP_Starship-kOS-Interface/blob/main/LICENSE).
