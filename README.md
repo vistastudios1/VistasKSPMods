@@ -5,6 +5,9 @@ This is the repository that I store my mods within
 - Custom V3 HSR For StarshipExpantionProject
 
 
+# *WARNING THIS IS A DEVELOPMENT VERSION*
+
+
 ### Dependencies
 
 - [Starship Expantion Project | Beta 6](https://github.com/Kari1407/Starship-Expansion-Project/releases/tag/v3.0.0-b6)
