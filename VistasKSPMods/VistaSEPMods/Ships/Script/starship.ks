@@ -1059,9 +1059,9 @@ function FindParts {
         set BoosterEngines to SHIP:PARTSNAMED("SEP.25.BOOSTER.CLUSTER").
         set GridFins to SHIP:PARTSNAMED("SEP.25.BOOSTER.GRIDFIN").
         if ship:partsnamed("VS.25.HSR.BL3"):length > 0 {
-             set HSR to SHIP:PARTSNAMED("VS.25.HSR.BL3").
+            set HSR to SHIP:PARTSNAMED("VS.25.HSR.BL3").
         } else {
-             set HSR to SHIP:PARTSNAMED("SEP.25.BOOSTER.HSR").
+            set HSR to SHIP:PARTSNAMED("SEP.25.BOOSTER.HSR").
         }
         set BoosterCore to SHIP:PARTSNAMED("SEP.25.BOOSTER.CORE").
         if BoosterCore:length > 0 {
@@ -5124,7 +5124,7 @@ set launchbutton:ontoggle to {
                             set message2:text to "".
                             set message3:text to "".
                         } else {
-                            set HSRJet to false.
+                            set HSRJet to true.
                             set DeltaVCheck to true.
                             set message1:text to "".
                             set message2:text to "".
@@ -15092,6 +15092,10 @@ function updateTelemetry {
             set sAttitude:style:bg to "starship_img/FullstackShip-45".
         }
     } else {
+        // if vAng(facing:forevector, vxcl(up:vector, velocity:surface)) < 90 set currentPitch to 270 + ship:facing:pitch.
+        // else set currentPitch to 90 - ship:facing:pitch.
+        // set sAttitude:style:bg to "starship_img/ShipAttitude/"+round(currentPitch):tostring.
+
         if vAng(facing:vector,up:vector) < 23 {
             set sAttitude:style:bg to "starship_img/Ship".
         } else if vAng(facing:vector,up:vector) < 67 and vAng(facing:vector,up:vector) > 23 {
