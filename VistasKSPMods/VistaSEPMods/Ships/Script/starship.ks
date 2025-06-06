@@ -7825,6 +7825,8 @@ Function LaunchSteering {
         print "Desired Accel: " + round(DesiredAccel / 9.81, 2) + "G".
         print "Ratio: " + round(DesiredAccel / MaxAccel, 2).
         print "Time to Orbit Completion: " + round(TimeToOrbitCompletion) + "s".
+        print " ".
+        print "Pitch: " + round(ship:facing:pitch).
 
         rcs on.
         set result to lookdirup(heading(myAzimuth + 3 * TargetError, ProgradeAngle + OrbitBurnPitchCorrection):vector, LaunchRollVector).
@@ -7843,7 +7845,7 @@ function LaunchLabelData {
         if altitude - LaunchElev > 2000 and altitude - LaunchElev < 3000 and kuniverse:timewarp:warp = 1 {
             set kuniverse:timewarp:warp to 4.
         }
-        else if apoapsis > BoosterAp - 5000 {
+        else if apoapsis > BoosterAp - 8000*Scale {
             if not StageSepComplete {
                 if kuniverse:timewarp:warp > 0 {set kuniverse:timewarp:warp to 0.}
             }
@@ -15092,17 +15094,9 @@ function updateTelemetry {
             set sAttitude:style:bg to "starship_img/FullstackShip-45".
         }
     } else {
-        // if vAng(facing:forevector, vxcl(up:vector, velocity:surface)) < 90 set currentPitch to 270 + ship:facing:pitch.
-        // else set currentPitch to 90 - ship:facing:pitch.
-        // set sAttitude:style:bg to "starship_img/ShipAttitude/"+round(currentPitch):tostring.
-
-        if vAng(facing:vector,up:vector) < 23 {
-            set sAttitude:style:bg to "starship_img/Ship".
-        } else if vAng(facing:vector,up:vector) < 67 and vAng(facing:vector,up:vector) > 23 {
-            set sAttitude:style:bg to "starship_img/Ship-45".
-        } else if vAng(facing:vector,up:vector) > 67 {
-            set sAttitude:style:bg to "starship_img/Ship-0".
-        }
+        if vAng(facing:forevector, vxcl(up:vector, velocity:surface)) < 90 set currentPitch to 360-vang(facing:forevector,up:vector).
+        else set currentPitch to vang(facing:forevector,up:vector).
+        set sAttitude:style:bg to "starship_img/ShipAttitude/"+round(currentPitch):tostring.
     }
 
 

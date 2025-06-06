@@ -146,6 +146,7 @@ for part in ship:parts {
     }
 }
 
+set landingzone to ship:geoposition.
 
 if BoosterEngines[0]:children:length > 1 and ( BoosterEngines[0]:children[0]:name:contains("SEP.23.RAPTOR2.SL.RC") or BoosterEngines[0]:children[0]:name:contains("SEP.23.RAPTOR2.SL.RB") 
         or BoosterEngines[0]:children[1]:name:contains("SEP.23.RAPTOR2.SL.RC") or BoosterEngines[0]:children[1]:name:contains("SEP.23.RAPTOR2.SL.RB") ) {
@@ -930,7 +931,7 @@ until False {
 
 
 function Boostback {
-    for eng in BoosterSingleEnginesRB eng:shutdown.
+    if BoosterSingleEngines for eng in BoosterSingleEnginesRB eng:shutdown.
     wait until SHIP:PARTSNAMED("SEP.23.SHIP.BODY"):LENGTH = 0 and SHIP:PARTSNAMED("SEP.23.SHIP.BODY.EXP"):LENGTH = 0 and SHIP:PARTSNAMED("SEP.24.SHIP.CORE"):LENGTH = 0 and SHIP:PARTSNAMED("SEP.24.SHIP.CORE.EXP"):LENGTH = 0 and SHIP:PARTSNAMED("SEP.23.SHIP.DEPOT"):LENGTH = 0.
     wait 0.001.
     set ShipConnectedToBooster to false.
@@ -2286,6 +2287,8 @@ FUNCTION SteeringCorrections {
     print " ".
     print "Steering Error: " + round(SteeringManager:angleerror, 2).
     if not BoostBackComplete print " ".
+    if not BoostBackComplete print "Pitch: " + round(ship:facing:pitch).
+    if not BoostBackComplete print " ".
     if not BoostBackComplete print "FlipTime: " + round(FlipTime, 2).
     //print "OPCodes left: " + opcodesleft.
 
@@ -3310,17 +3313,9 @@ function GUIupdate {
             set bAttitude:style:bg to "starship_img/Fullstack-45".
         }
     } else {
-        if vAng(facing:vector,up:vector) < 23 {
-            set bAttitude:style:bg to "starship_img/booster".
-        } else if vAng(facing:vector,up:vector) < 67 and vAng(facing:vector,up:vector) > 23 {
-            if vang(facing:forevector, vCrs(north:vector, up:vector)) < 90 {
-                set bAttitude:style:bg to "starship_img/booster+45".
-            } else {
-                set bAttitude:style:bg to "starship_img/booster-45".
-            }
-        } else if vAng(facing:vector,up:vector) > 67 {
-            set bAttitude:style:bg to "starship_img/booster-0".
-        }
+        if vAng(facing:forevector, vxcl(up:vector, landingzone:position - BoosterCore:position)) < 90 set currentPitch to 360-vang(facing:forevector,up:vector).
+        else set currentPitch to vang(facing:forevector,up:vector).
+        set bAttitude:style:bg to "starship_img/BoosterAttitude/"+round(currentPitch):tostring.
     }
 
 
