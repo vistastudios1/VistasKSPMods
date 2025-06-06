@@ -4,8 +4,12 @@ This is the repository that I store my mods within
 ### What's included
 - Custom V3 HSR For StarshipExpantionProject
 
+---
 
-# *WARNING THIS IS A DEVELOPMENT VERSION*
+### *WARNING THIS IS A DEVELOPMENT VERSION*
+### ISSUES MAY OCCUR
+
+---
 
 
 ### Dependencies
