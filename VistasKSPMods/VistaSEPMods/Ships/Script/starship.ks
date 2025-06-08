@@ -5298,7 +5298,7 @@ set launchbutton:ontoggle to {
                             set message2:text to "".
                             set message3:text to "".
                         } else {
-                            set HSRJet to true.
+                            set HSRJet to false.
                             set DeltaVCheck to true.
                             set message1:text to "".
                             set message2:text to "".
