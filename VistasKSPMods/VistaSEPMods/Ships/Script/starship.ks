@@ -97,6 +97,26 @@ else set LSCoords to ("0,0").
 set RadarAlt to 0.
 set Hotstaging to false.
 
+
+local VersionDisplay is GUI(100).
+    set VersionDisplay:style:bg to "".
+    local VersionDisplayLayout is VersionDisplay:addvlayout().
+    local VersionDisplayLabel is VersionDisplayLayout:addlabel().
+        set VersionDisplayLabel:style:wordwrap to false.
+        set VersionDisplayLabel:style:align to "center".
+        set VersionDisplayLabel:text to Scriptversion.
+VersionDisplay:show().
+
+
+
+local IgnitionChancesOpen is GUI(100).
+    local IgnitionChances is IgnitionChancesOpen:addbutton().
+        set IgnitionChances:toggle to true.
+        set IgnitionChances:style:wordwrap to false.
+        set IgnitionChances:style:align to "center".
+        set IgnitionChances:text to "Ignition Chances".
+
+
 local sTelemetry is GUI(150).
     set sTelemetry:style:bg to "starship_img/telemetry_bg".
     set sTelemetry:skin:label:textcolor to white.
@@ -114,13 +134,6 @@ local missionTimeLabel is sMissionTime:addlabel().
     set missionTimeLabel:style:wordwrap to false.
     set missionTimeLabel:style:align to "center".
     set missionTimeLabel:text to "Startup".
-local VersionDisplay is GUI(100).
-    set VersionDisplay:style:bg to "".
-    local VersionDisplayLabel is VersionDisplay:addlabel().
-        set VersionDisplayLabel:style:wordwrap to false.
-        set VersionDisplayLabel:style:align to "center".
-        set VersionDisplayLabel:text to Scriptversion.
-VersionDisplay:show().
 local sAttitude is ShipAttitude:addlabel().
     set sAttitude:style:bg to "starship_img/ship".
 local sSpeed is ShipStatus:addlabel("<b>SPEED  </b>").
@@ -182,6 +195,9 @@ function CreateTelemetry {
     set VersionDisplay:y to 36*TScale.
         set VersionDisplayLabel:style:width to 100*TScale.
         set VersionDisplayLabel:style:fontsize to 12*TScale.
+    
+    set IgnitionChancesOpen:x to 240*TScale.
+    set IgnitionChancesOpen:y to 0.
 
     set sAttitude:style:margin:left to 20*TScale.
     set sAttitude:style:margin:right to 20*TScale.
@@ -1222,6 +1238,162 @@ print "Starship Interface startup complete!".
 
 //-------------Start Graphic User Interface-------------//
 
+set LOIgnCha to 1.
+set SLIgnCha to 1.
+set VCIgnCha to 1.
+set BBIgnCha to 1.
+set LB1IgnCha to 1.
+set LB2IgnCha to 1.
+
+
+local IgnitionChancesGUI is GUI(250).
+    set IgnitionChancesGUI:style:bg to "starship_img/starship_background".
+    set IgnitionChancesGUI:style:border:h to 10.
+    set IgnitionChancesGUI:style:border:v to 10.
+    set IgnitionChancesGUI:style:padding:v to 0.
+    set IgnitionChancesGUI:style:padding:h to 0.
+    set IgnitionChancesGUI:x to 240.
+    set IgnitionChancesGUI:y to 240.
+    set IgnitionChancesGUI:skin:button:bg to "starship_img/starship_background".
+    set IgnitionChancesGUI:skin:button:on:bg to "starship_img/starship_background_light".
+    set IgnitionChancesGUI:skin:button:hover:bg to "starship_img/starship_background_light".
+    set IgnitionChancesGUI:skin:button:hover_on:bg to "starship_img/starship_background_light".
+    set IgnitionChancesGUI:skin:button:active:bg to "starship_img/starship_background_light".
+    set IgnitionChancesGUI:skin:button:active_on:bg to "starship_img/starship_background_light".
+    set IgnitionChancesGUI:skin:button:border:v to 10.
+    set IgnitionChancesGUI:skin:button:border:h to 10.
+    set IgnitionChancesGUI:skin:button:textcolor to white.
+    set IgnitionChancesGUI:skin:label:textcolor to white.
+local IgnChaLayout is IgnitionChancesGUI:addvlayout().
+local Quest is IgnChaLayout:addlabel().
+    set Quest:text to "<b>Multipliers for Ignition Chances</b>".
+    set Quest:style:margin:top to 12.
+    set Quest:style:margin:bottom to 16.
+    set Quest:style:margin:left to 8.
+    set Quest:style:margin:right to 8.
+    set Quest:style:fontsize to 16.
+
+local LOQuest is IgnChaLayout:addlabel().
+    set LOQuest:text to "<b>Lift-Off:</b>".
+    set LOQuest:style:margin:top to 12.
+    set LOQuest:style:margin:bottom to 12.
+    set LOQuest:style:margin:left to 12.
+local LOLayout is IgnChaLayout:addhlayout().
+local LOSelect is LOLayout:addtextfield().
+    set LOSelect:tooltip to " All 33".
+    set LOSelect:style:width to 100.
+    set LOSelect:style:margin:bottom to 14.
+    set LOSelect:style:margin:left to 12.
+local LOMult is LOLayout:addlabel().
+    set LOMult:text to " * 0.98".
+    set LOMult:style:margin:left to 6.
+    set LOMult:style:margin:bottom to 12.
+
+local HSQuest is IgnChaLayout:addlabel().
+    set HSQuest:text to "<b>Ship:</b>".
+    set HSQuest:style:margin:top to 12.
+    set HSQuest:style:margin:bottom to 12.
+    set HSQuest:style:margin:left to 12.
+local HSLayout is IgnChaLayout:addhlayout().
+    local HSSelect1 is HSLayout:addtextfield().
+        set HSSelect1:tooltip to " Sea-Level".
+        set HSSelect1:style:width to 100.
+        set HSSelect1:style:margin:bottom to 12.
+        set HSSelect1:style:margin:left to 12.
+    local HS1Mult is HSLayout:addlabel().
+        set HS1Mult:text to " * 0.99".
+        set HS1Mult:style:margin:left to 6.
+        set HS1Mult:style:margin:bottom to 12.
+    local HSSelect2 is HSLayout:addtextfield().
+        set HSSelect2:tooltip to " Vacuum".
+        set HSSelect2:style:width to 100.
+        set HSSelect2:style:margin:bottom to 12.
+        set HSSelect2:style:margin:right to 12.
+    local HS2Mult is HSLayout:addlabel().
+        set HS2Mult:text to " * 0.99".
+        set HS2Mult:style:margin:left to 6.
+        set HS2Mult:style:margin:bottom to 12.
+
+local BBQuest is IgnChaLayout:addlabel().
+    set BBQuest:text to "<b>Boostback:</b>".
+    set BBQuest:style:margin:top to 12.
+    set BBQuest:style:margin:bottom to 12.
+    set BBQuest:style:margin:left to 12.
+local BBLayout is IgnChaLayout:addhlayout().
+local BBSelect is BBLayout:addtextfield().
+    set BBSelect:tooltip to " Middle Inner".
+    set BBSelect:style:width to 100.
+    set BBSelect:style:margin:bottom to 14.
+    set BBSelect:style:margin:left to 12.
+local BBMult is BBLayout:addlabel().
+    set BBMult:text to " * 0.97".
+    set BBMult:style:margin:left to 6.
+    set BBMult:style:margin:bottom to 12.
+
+local LBQuest is IgnChaLayout:addlabel().
+    set LBQuest:text to "<b>Landing Burn (Booster):</b>".
+    set LBQuest:style:margin:top to 12.
+    set LBQuest:style:margin:bottom to 12.
+    set LBQuest:style:margin:left to 12.
+local LBLayout is IgnChaLayout:addhlayout().
+    local LBSelect1 is LBLayout:addtextfield().
+        set LBSelect1:tooltip to " Center".
+        set LBSelect1:style:width to 100.
+        set LBSelect1:style:margin:bottom to 12.
+        set LBSelect1:style:margin:left to 12.
+    local LB1Mult is LBLayout:addlabel().
+        set LB1Mult:text to " * 0.95".
+        set LB1Mult:style:margin:left to 6.
+        set LB1Mult:style:margin:bottom to 12.
+    local LBSelect2 is LBLayout:addtextfield().
+        set LBSelect2:tooltip to " Middle Inner".
+        set LBSelect2:style:width to 100.
+        set LBSelect2:style:margin:bottom to 14.
+        set LBSelect2:style:margin:right to 12.
+    local LB2Mult is LBLayout:addlabel().
+        set LB2Mult:text to " * 0.97".
+        set LB2Mult:style:margin:left to 6.
+        set LB2Mult:style:margin:bottom to 12.
+
+local IgnConfirm is IgnChaLayout:addbutton().
+    set IgnConfirm:text to "<b><color=green>Confirm</color></b>".
+    set IgnConfirm:style:margin:bottom to 8.
+    set IgnConfirm:onclick to {
+        if LOSelect:text = "" set LOSelect:text to "1".
+        if HSSelect1:text = "" set HSSelect1:text to "1".
+        if HSSelect2:text = "" set HSSelect2:text to "1".
+        if BBSelect:text = "" set BBSelect:text to "1".
+        if LBSelect1:text = "" set LBSelect1:text to "1".
+        if LBSelect2:text = "" set LBSelect2:text to "1".
+        set LOIgnCha to LOSelect:text:toscalar.
+        set SLIgnCha to HSSelect1:text:toscalar.
+        set VCIgnCha to HSSelect2:text:toscalar.
+        set BBIgnCha to BBSelect:text:toscalar.
+        set LB1IgnCha to LBSelect1:text:toscalar.
+        set LB2IgnCha to LBSelect2:text:toscalar.
+
+        if Boosterconnected sendMessage(processor(Volume("Booster")),"IgnChance,"+BBIgnCha:tostring+","+LB1IgnCha:tostring+","+LB2IgnCha:tostring).
+
+        set IgnitionChances:pressed to false.
+        IgnitionChancesGUI:hide().
+    }.
+    
+
+set IgnitionChances:ontoggle to {
+    parameter toggle.
+    if toggle {
+        IgnitionChancesGUI:show().
+    }
+    else IgnitionChancesGUI:hide().
+}.
+
+
+IgnitionChancesOpen:show().
+
+
+
+
+
 local ScaleUI is GUI(300).
     set ScaleUI:style:bg to "starship_img/starship_background".
     set ScaleUI:style:border:h to 10.
@@ -1270,6 +1442,8 @@ local ScaleConfirm is ScaleLayout:addbutton().
         ScaleUI:hide().
     }.
     
+
+
 
 
 
@@ -6692,6 +6866,7 @@ function Launch {
         set TargetError to 0.
         LogToFile("Launch Program Started").
         set runningprogram to "Launch".
+        IgnitionChancesOpen:hide().
         ShowButtons(0).
         sas off.
         rcs off.
@@ -6935,7 +7110,7 @@ function Launch {
             
             if not BoosterSingleEngines BoosterEngines[0]:getmodule("ModuleEnginesFX"):doaction("activate engine", true).
             else {
-                for eng in BoosterSingleEnginesRC if random() < 0.98 eng:activate.
+                for eng in BoosterSingleEnginesRC if random() < 0.98*LOIgnCha eng:activate.
             }
 
             set EngineStartTime to time:seconds.
@@ -6949,7 +7124,7 @@ function Launch {
                 set x to 0.
                 for eng in BoosterSingleEnginesRB {
                     if x = 3 or x = 7 or x = 11 or x = 15  or x = 19 {}
-                    else if random() < 0.98 eng:activate.
+                    else if random() < 0.98*LOIgnCha eng:activate.
                     set x to x + 1.
                 }
                 set inactiveEng to List(7,11,15,19,24).
@@ -6962,7 +7137,7 @@ function Launch {
             if BoosterSingleEngines {
                 set x to 0.
                 for eng in BoosterSingleEnginesRB {
-                    if x = 3 or x = 7 or x = 11 or x = 15 or x = 19 if random() < 0.98 eng:activate.
+                    if x = 3 or x = 7 or x = 11 or x = 15 or x = 19 if random() < 0.98*LOIgnCha eng:activate.
                     set x to x + 1.
                 }
             }
@@ -7216,6 +7391,7 @@ function Launch {
             set steeringManager:maxstoppingtime to 0.8*Scale.
             when apoapsis > BoosterAp - 21000 * Scale then {
                 set steeringManager:maxstoppingtime to 0.2.
+                if ShipType:contains("Block2") set LaunchRollVector to up:vector.
                 if HSRJet {
                     sendMessage(processor(volume("Booster")), "HSRJet").
                 } 
@@ -7448,6 +7624,13 @@ function Launch {
                 KUniverse:forceactive(vessel("Booster")).
             }
 
+            when altitude > 0.72*TargetAp then {
+                set LaunchRollVector to heading(mod(myAzimuth - 270, 360),0):vector.
+                if vang(north:vector, LaunchRollVector) > 270 {
+                    set LaunchRollVector to -LaunchRollVector.
+                }
+            }
+
             when deltav < 89 and deltav > 0 or throttle < 0.42 and deltav < 600*Scale and deltav > 0 then {
                 set quickengine3:pressed to false.
             }
@@ -7672,13 +7855,9 @@ Function LaunchSteering {
         }
         set result to lookdirup(heading(myAzimuth + 3 * TargetError, targetpitch):vector, LaunchRollVector).
     } 
-    else if apoapsis > BoosterAp - 21000 * Scale and Boosterconnected {
+    else if apoapsis > BoosterAp - 21000 * Scale and Boosterconnected and not Hotstaging {
         if apoapsis > BoosterAp - 10000 * Scale and Boosterconnected {
-            if RSS {
-                set result to lookDirUp(srfPrograde:vector + 0.16*up:vector, LaunchRollVector).
-            } else {
-                set result to lookDirUp(srfPrograde:vector, LaunchRollVector).
-            }
+            set Hotstaging to true.
         }
         else {
             if RSS {
@@ -7688,7 +7867,7 @@ Function LaunchSteering {
             }
         }
     }
-    else if Boosterconnected and not lowTWR and CargoMass < 50001 {
+    else if Boosterconnected and not lowTWR and CargoMass < 50001 and not Hotstaging {
         if RSS {
             if ShipType = "Depot" {
                 set targetpitch to 90 - (7.25 * SQRT(max((altitude - 250 - LaunchElev), 0)/1300)).
@@ -7725,7 +7904,7 @@ Function LaunchSteering {
         }
         set result to lookdirup(heading(myAzimuth + 3 * TargetError, targetpitch):vector, LaunchRollVector).
     }
-    else if Boosterconnected and not lowTWR and CargoMass > 50000 {
+    else if Boosterconnected and not lowTWR and CargoMass > 50000 and not Hotstaging {
         if RSS {
             if ShipType = "Depot" {
                 set targetpitch to 90 - (7.25 * SQRT(max((altitude - 250 - LaunchElev), 0)/1250)).
@@ -7762,7 +7941,7 @@ Function LaunchSteering {
         }
         set result to lookdirup(heading(myAzimuth + 3 * TargetError, targetpitch):vector, LaunchRollVector).
     }
-    else if Boosterconnected {
+    else if Boosterconnected and not Hotstaging {
         if RSS {
             if ShipType = "Depot" {
                 set targetpitch to 90 - (7.25 * SQRT(max((altitude - 250 - LaunchElev), 0)/1350)).
@@ -11182,15 +11361,17 @@ function ReEntryData {
                 wait 0.001.
                 Tank:shutdown.
                 //if not (TargetOLM = "False") {sendMessage(Vessel(TargetOLM), "RetractMechazillaRails").}
+                SLEngines[0]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 0).
                 SLEngines[1]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 0).
                 SLEngines[2]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 0).
                 SLEngines[0]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
+                if random() < 0.99*SLIgnCha SLEngines[0]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).
                 when time:seconds > LandingFlipStart + 0.7 then {
                     SLEngines[1]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
-                    SLEngines[1]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).
+                    if random() < 0.99*SLIgnCha SLEngines[1]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).
                     when time:seconds > LandingFlipStart + 1.0 then {
-                        if not Nose:name:contains("SEP.23.SHIP.FLAPS") {SLEngines[2]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).}
-                        if not Nose:name:contains("SEP.23.SHIP.FLAPS") {SLEngines[2]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).}
+                        SLEngines[2]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
+                        if random() < 0.99*SLIgnCha SLEngines[2]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).
                         setflaps(0, 87, 1, 0).
                         if not (TargetOLM = "False") {
                             sendMessage(Vessel(TargetOLM), "ExtendMechazillaRails").
@@ -11210,15 +11391,17 @@ function ReEntryData {
                 Tank:shutdown.
                 if not (TargetOLM = "False") {sendMessage(Vessel(TargetOLM), "ExtendMechazillaRails").}
                 //if not (TargetOLM = "False") {sendMessage(Vessel(TargetOLM), "RetractMechazillaRails").}
+                SLEngines[0]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 0).
                 SLEngines[1]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 0).
                 SLEngines[2]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 0).
                 SLEngines[0]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
+                if random() < 0.99*SLIgnCha SLEngines[0]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).
                 when time:seconds > LandingFlipStart + 0.3 then {
                     SLEngines[1]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
-                    SLEngines[1]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).
+                    if random() < 0.99*SLIgnCha SLEngines[1]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).
                     when time:seconds > LandingFlipStart + 0.5 then {
-                        if not Nose:name:contains("SEP.23.SHIP.FLAPS") {SLEngines[2]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).}
-                        if not Nose:name:contains("SEP.23.SHIP.FLAPS") {SLEngines[2]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).}
+                        SLEngines[2]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
+                        if random() < 0.99*SLIgnCha SLEngines[2]:getmodule("ModuleEnginesFX"):SetField("thrust limiter", 100).
                         setflaps(0, 87, 1, 0).
                     }
                 }
@@ -12396,9 +12579,9 @@ function ClearInterfaceAndSteering {
 function ActivateEngines {
     parameter WhichEngines.
     if WhichEngines = 0 {
-        SLEngines[0]:activate.
-        SLEngines[1]:activate.
-        SLEngines[2]:activate.
+        if random() < 0.99*SLIgnCha SLEngines[0]:activate.
+        if random() < 0.99*SLIgnCha SLEngines[1]:activate.
+        if random() < 0.99*SLIgnCha SLEngines[2]:activate.
         SLEngines[0]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
         SLEngines[1]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
         SLEngines[2]:getmodule("ModuleGimbal"):SetField("gimbal limit", 100).
@@ -12406,7 +12589,7 @@ function ActivateEngines {
     }
     else {
         for eng in VACEngines {
-            eng:activate.
+            if random() < 0.99*VCIgnCha eng:activate.
         }
         LogToFile("VAC Engine Start Successful!").
     }
@@ -15088,14 +15271,14 @@ function DetectWobblyTower {
 function updateTelemetry {
 
     if Boosterconnected {
-        if vAng(facing:vector,up:vector) < 23 {
-            set sAttitude:style:bg to "starship_img/FullstackShip".
-        } else if vAng(facing:vector,up:vector) < 67 and vAng(facing:vector,up:vector) > 23 {
-            set sAttitude:style:bg to "starship_img/FullstackShip-45".
-        }
+        if vAng(facing:forevector, vxcl(up:vector, velocity:surface)) < 90 set currentPitch to vAng(facing:forevector,up:vector).
+        else set currentPitch to 360-vAng(facing:forevector,up:vector).
+        if round(currentPitch) = 360 set currentPitch to 0.
+        set sAttitude:style:bg to "starship_img/ShipStackAttitude/"+round(currentPitch):tostring.
     } else {
         if vAng(facing:forevector, vxcl(up:vector, velocity:surface)) < 90 set currentPitch to 360-vang(facing:forevector,up:vector).
         else set currentPitch to vang(facing:forevector,up:vector).
+        if round(currentPitch) = 360 set currentPitch to 0.
         set sAttitude:style:bg to "starship_img/ShipAttitude/"+round(currentPitch):tostring.
     }
 

@@ -265,6 +265,9 @@ set Fpos to 0.
 set FposBase to 0.
 set CounterEngine to false.
 set LandingBurnEC to false.
+set BBIgn to 1.
+set LBIgnC to 1.
+set LBIgnM to 1.
 
 local bTelemetry is GUI(150).
     set bTelemetry:style:bg to "starship_img/telemetry_bg".
@@ -881,7 +884,7 @@ until False {
             set message to RECEIVED:CONTENT:SPLIT(",").
             set command to message[0].
             if message:length > 1 {
-                set MesParameter to message[1].
+                if message:length = 2 set MesParameter to message[1].
             }
         }
     IF RECEIVED:CONTENT = "Boostback" {
@@ -921,7 +924,13 @@ until False {
         bTelemetry:hide().
         set TScale to MesParameter:toscalar.
         CreateTelemetry().
+        wait 0.2.
         bTelemetry:show().
+    }
+    else if command = "IgnChance" {
+        set BBIgn to message[1]:toscalar.
+        set LBIgnC to message[2]:toscalar.
+        set LBIgnM to message[3]:toscalar.
     }
     ELSE {
         PRINT "Unexpected message: " + RECEIVED:CONTENT.
@@ -1108,23 +1117,23 @@ function Boostback {
                     set x to x + 1.
                 }
                 set tEngStart to time:seconds.
-                if random() < 0.98 BoosterSingleEnginesRC[3]:activate.
-                if random() < 0.98 BoosterSingleEnginesRC[8]:activate.
+                if random() < 0.98*BBIgn BoosterSingleEnginesRC[3]:activate.
+                if random() < 0.98*BBIgn BoosterSingleEnginesRC[8]:activate.
                 when time:seconds - tEngStart > 0.2 then {
-                    if random() < 0.98 BoosterSingleEnginesRC[4]:activate.
-                    if random() < 0.95 BoosterSingleEnginesRC[9]:activate.
+                    if random() < 0.98*BBIgn BoosterSingleEnginesRC[4]:activate.
+                    if random() < 0.95*BBIgn BoosterSingleEnginesRC[9]:activate.
                 }
                 when time:seconds - tEngStart > 0.4 then {
-                    if random() < 0.95 BoosterSingleEnginesRC[6]:activate.
-                    if random() < 0.98 BoosterSingleEnginesRC[11]:activate.
+                    if random() < 0.95*BBIgn BoosterSingleEnginesRC[6]:activate.
+                    if random() < 0.98*BBIgn BoosterSingleEnginesRC[11]:activate.
                 }
                 when time:seconds - tEngStart > 0.6 then {
-                    if random() < 0.95 BoosterSingleEnginesRC[7]:activate.
-                    if random() < 0.98 BoosterSingleEnginesRC[12]:activate.
+                    if random() < 0.95*BBIgn BoosterSingleEnginesRC[7]:activate.
+                    if random() < 0.98*BBIgn BoosterSingleEnginesRC[12]:activate.
                 }
                 when time:seconds - tEngStart > 0.8 then {
-                    if random() < 0.98 BoosterSingleEnginesRC[5]:activate.
-                    if random() < 0.95 BoosterSingleEnginesRC[10]:activate.
+                    if random() < 0.98*BBIgn BoosterSingleEnginesRC[5]:activate.
+                    if random() < 0.95*BBIgn BoosterSingleEnginesRC[10]:activate.
                 }
             }
             else {
@@ -1423,14 +1432,14 @@ function Boostback {
             rcs off.
 
             set SteeringManager:maxstoppingtime to 5.
-            lock SteeringVector to lookdirup(up:vector+PositionError, -up:vector).
+            lock SteeringVector to lookdirup(up:vector+facing:forevector, -up:vector).
             lock steering to SteeringVector.
             unlock SteeringVectorBoostback.
         }
 
         set CurrentVec to ship:facing:forevector.
 
-        until vang(facing:forevector, CurrentVec) > 5 or not HSRJet {
+        until vang(facing:forevector, up:vector) < 45 or not HSRJet {
             SteeringCorrections().
             PollUpdate().
             SetBoosterActive().
@@ -1710,7 +1719,7 @@ function Boostback {
     if BoosterSingleEngines {
         set x to 1.
         until x > 3 {
-            if random() < 0.75 BoosterSingleEnginesRC[x-1]:activate.
+            if random() < 0.95*LBIgnC BoosterSingleEnginesRC[x-1]:activate.
             set x to x + 1.
         }
     }
@@ -1719,7 +1728,7 @@ function Boostback {
             set x to 1.
             for eng in BoosterSingleEnginesRC {
                 if x = 4 or x = 6 or x = 8 or x = 10 or x = 12 {
-                    if random() < 0.8 eng:activate.
+                    if random() < 0.98*LBIgnM eng:activate.
                     set eng:gimbal:lock to false.
                 }
                 set x to x + 1.
@@ -1730,7 +1739,7 @@ function Boostback {
             set x to 1.
             for eng in BoosterSingleEnginesRC {
                 if x = 4 or x = 6 or x = 8 or x = 10 or x = 12 {} else {
-                    if random() < 0.8 eng:activate.
+                    if random() < 0.95*LBIgnM eng:activate.
                     set eng:gimbal:lock to false.
                 }
                 set x to x + 1.
@@ -3306,15 +3315,13 @@ function PollUpdate {
 
 function GUIupdate {
 
+    if vAng(facing:forevector, vxcl(up:vector, landingzone:position - BoosterCore:position)) < 90 set currentPitch to 360-vAng(facing:forevector,up:vector).
+    else set currentPitch to vAng(facing:forevector,up:vector).
+    if round(currentPitch) = 360 set currentPitch to 0.
+    //set ClockHeader:text to round(currentPitch) + "(" + round(currentPitch,3) + ")".
     if ShipConnectedToBooster {
-        if vAng(facing:vector,up:vector) < 24 {
-            set bAttitude:style:bg to "starship_img/Fullstack".
-        } else {
-            set bAttitude:style:bg to "starship_img/Fullstack-45".
-        }
+        set bAttitude:style:bg to "starship_img/StackAttitude/"+round(currentPitch):tostring.
     } else {
-        if vAng(facing:forevector, vxcl(up:vector, landingzone:position - BoosterCore:position)) < 90 set currentPitch to 360-vang(facing:forevector,up:vector).
-        else set currentPitch to vang(facing:forevector,up:vector).
         set bAttitude:style:bg to "starship_img/BoosterAttitude/"+round(currentPitch):tostring.
     }
 
