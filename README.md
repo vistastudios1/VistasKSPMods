@@ -3,6 +3,7 @@ This is the repository that I store my mods within
 
 ### What's included
 - Custom V3 HSR For StarshipExpantionProject
+- Block 2 Additions
 
 
 ### Dependencies
