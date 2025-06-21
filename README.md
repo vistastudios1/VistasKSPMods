@@ -11,6 +11,7 @@ This is the repository that I store my mods within
 - [Starship Expantion Project | Beta 6](https://github.com/Kari1407/Starship-Expansion-Project/releases/tag/v3.0.0-b6)
 - [Resurfaced](https://github.com/Tantares/Resurfaced/releases/) or CKAN version
 - [Shabby](https://github.com/KSPModdingLibs/Shabby/releases) or CKAN version
+- Hullcam VDS
 
 ### Installation Instructions
 - First, drag the contents of "GameData" into your KSP GameData folder.
