@@ -19,10 +19,8 @@ This is the repository that I store my mods within
 
 Boom! Now you have the mod Installed.
 
-**If you don't want Nubro's script, you may delete the script folder out of [KSP DIRECTORY]/Ships/**
-
 ---
 
 ### Licensing
 
-All parts within the ".../GameData/VistaSEPMods/Assets" folder and its contents (.mu, .png, .dds files) are ***distributed under All Rights Reserved***. ***All .cfg files are distributed under the [CC-NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license. **See more in the [License](https://github.com/vistastudios1/VistasKSPMods/blob/main/LICENSE)**
+All parts within the ".../GameData/VistaSEPMods/Assets" folder and its contents (.mu, .png, .dds files) are ***distributed under All Rights Reserved***. ***All .cfg files are distributed under the [CC-NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.*** **See more in the [License](https://github.com/vistastudios1/VistasKSPMods/blob/main/LICENSE)**
